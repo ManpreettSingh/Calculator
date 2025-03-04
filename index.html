@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Stake Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Stake Calculator</h1>
+        
+        <div class="input-group">
+            <input type="number" id="payout" class="input" placeholder="Desired Payout (₹)" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <input type="number" id="lower-odds" class="input" placeholder="Lower Odds" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <input type="number" id="upper-odds" class="input" placeholder="Upper Odds" step="0.01">
+        </div>
+        
+        <button onclick="calculateStakes()">Calculate Stakes</button>
+        
+        <div class="results" id="results">
+            <div class="result-item">
+                <span class="result-label">Lower Odds Stake:</span>
+                <span class="result-value" id="lower-stake">₹0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Higher Odds Stake:</span>
+                <span class="result-value" id="higher-stake">₹0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Total Investment:</span>
+                <span class="result-value" id="total-investment">₹0.00</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Max Loss:</span>
+                <span class="result-value" id="max-loss">₹0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateStakes() {
+            // Get input values
+            const payout = parseFloat(document.getElementById('payout').value);
+            const lowerOdds = parseFloat(document.getElementById('lower-odds').value);
+            const upperOdds = parseFloat(document.getElementById('upper-odds').value);
+
+            // Validate inputs
+            if (isNaN(payout) || isNaN(lowerOdds) || isNaN(upperOdds)) {
+                alert('Please fill in all fields with valid numbers!');
+                return;
+            }
+
+            // Perform calculations
+            const lowerStake = payout / lowerOdds;
+            const higherStake = payout / upperOdds;
+            const totalInvestment = lowerStake + higherStake;
+            const maxLoss = totalInvestment - payout;
+
+            // Format numbers to currency
+            const formatter = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // Update results
+            document.getElementById('lower-stake').textContent = formatter.format(lowerStake);
+            document.getElementById('higher-stake').textContent = formatter.format(higherStake);
+            document.getElementById('total-investment').textContent = formatter.format(totalInvestment);
+            document.getElementById('max-loss').textContent = formatter.format(maxLoss);
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
